@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+    <title>volksfunk</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="hd">
+            <div id="logo">
+                <span>volksfunk</span>
+            </div>
+        </div>
+        <div class="bd">
+            <div id="login">
+                <div>
+                    <span class="caption">Email:</span>
+                    <input data-bind="value:login.email">
+                </div>
+                <div>
+                    <span class="caption">Password:</span>
+                    <input data-bind="value:login.password">
+                </div>
+                <div>
+                    <span class="caption"></span>
+                    <button data-bind="click:login.send">Log in or Sign up</button>
+                </div>
+            </div>
+            <div id="blurb">
+                Volksfunk helps music lovers discover free music. Sign up now and discover something new.
+            </div>
+        </div>
+    </div>
+</body>
+<script src="/javascripts/jquery-1.8.2.min.js"></script>
+<script src="/javascripts/knockout-2.2.0.debug.js"></script>
+<script src="/javascripts/volksfunk.js"></script>
+</html>

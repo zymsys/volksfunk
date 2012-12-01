@@ -1,0 +1,51 @@
+body {
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.container {
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#logo {
+    background-image: url('/images/Volksfunk.png');
+    width: 700px;
+    height: 406px;
+}
+
+#logo span {
+    display: none;
+}
+
+.bd {
+    margin-top: 15px;
+}
+
+#login {
+    display: inline-block;
+    width: 350px;
+    float: left;
+}
+
+#login span {
+    text-align: right;
+}
+
+#login .caption {
+    display: inline-block;
+    width: 150px;
+}
+
+#blurb {
+    display: inline-block;
+    width: 340px;
+    font-size: 18px;
+    padding: 5px;
+    background-color: #bbb;
+}

@@ -1,0 +1,5 @@
+.idea
+node_modules
+volksfunk.iml
+public/javascripts/jquery-1.8.2.min.js
+public/javascripts/knockout-2.2.0.debug.js

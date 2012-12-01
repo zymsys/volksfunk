@@ -8,8 +8,14 @@ exports.auth = function(req, res) {
         path: '/services/auth',
         method: 'POST'
     }, function (response) {
-        var responseData = {};
-        res.json(responseData);
+        var responseData = '';
+        response.on('data', function (chunk) {
+            responseData += chunk;
+        });
+        response.on('end', function () {
+            res.writeHead(200, { 'Content-type': 'application/json'});
+            res.end(responseData);
+        });
     });
     request.write('email=' + encodeURIComponent(req.body.email) + '&password=' + encodeURIComponent(req.body.password));
     request.end();

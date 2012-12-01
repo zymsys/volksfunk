@@ -1,12 +1,15 @@
 var http = require('http');
 
 exports.auth = function(req, res) {
-    console.log('hello');
+    var requestBody = 'email=' + encodeURIComponent(req.body.email) + '&password=' + encodeURIComponent(req.body.password);
     var request = http.request({
         hostname: 'localhost',
         port: 3001,
         path: '/services/auth',
-        method: 'POST'
+        method: 'POST',
+        headers: {
+            'Content-length': requestBody.length
+        }
     }, function (response) {
         var responseData = '';
         response.on('data', function (chunk) {
@@ -17,6 +20,7 @@ exports.auth = function(req, res) {
             res.end(responseData);
         });
     });
-    request.write('email=' + encodeURIComponent(req.body.email) + '&password=' + encodeURIComponent(req.body.password));
+    console.log(requestBody);
+    request.write(requestBody);
     request.end();
 };

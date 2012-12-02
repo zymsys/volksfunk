@@ -1,7 +1,10 @@
-var http = require('http');
+var http = require('http'),
+    events = require('events');
 
 var serverHost = 'localhost',
     serverPort = 3001;
+
+var queue = {};
 
 function withResponseData(response, doCallback) {
     var responseData = '';
@@ -53,6 +56,20 @@ exports.introduction = function (req, res) {
         relayJSONResponse(response, res);
     });
     request.end();
+};
+
+function sendNextTrack(genre, res) {
+    if (queue[genre].length > 0) {
+        res.json(queue[genre].shift());
+    } else {
+        exports.waitingForNextTrack = res;
+    }
+}
+
+exports.next = function (req, res) {
+    var genre = req.query.genre;
+    if (!queue[genre]) queue[genre] = [];
+    sendNextTrack(genre, res);
 };
 
 /*

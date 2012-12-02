@@ -49,6 +49,21 @@ $(function () {
         viewModel.page('login');
     }, viewModel);
 
+    ko.computed(function () {
+        var genre = viewModel.genre();
+        var secret = viewModel.secret();
+        if (!genre || !secret) return;
+        $.ajax('/client/introduction', {
+            data: {
+                secret: secret,
+                genre: genre
+            },
+            success: function (data) {
+                console.log('Send greetings to peers', data);
+            }
+        });
+    });
+
     var genres = [
             'Blues',
             'Classical',
@@ -59,7 +74,7 @@ $(function () {
             'Hip-Hop',
             'International',
             'Jazz',
-            'Novelty',
+            'Dubstep',
             'Old-Time',
             'Pop',
             'Rock',
@@ -73,6 +88,11 @@ $(function () {
                 viewModel.genre(genreName);
             })
         );
+    });
+
+    //Temp hack to set secret to test value
+    $('.logo').click(function () {
+        $.cookie('volksfunk_secret', 'cc62f827-ade2-4d45-9edb-5130e7678020', { expires: 30, path: '/' });
     });
 
     ko.applyBindings(viewModel);

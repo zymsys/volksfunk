@@ -24,6 +24,7 @@ app.configure('development', function(){
 });
 
 app.post('/services/auth', services.auth);
+app.get('/services/introduction', services.introduction);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

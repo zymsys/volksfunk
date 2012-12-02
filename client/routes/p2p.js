@@ -1,4 +1,5 @@
 var http = require('http'),
+    fs = require('fs'),
     querystring = require('querystring');
 
 function withData(provider, doCallback) {
@@ -29,5 +30,15 @@ exports.hello = function (req, res) {
             }
         }
         res.json(responseData);
+    });
+};
+
+exports.fetch = function (req, res) {
+    fs.readFile('public/cache/' + req.query.id + '/track.json', function (err, data) {
+        var track = JSON.parse(data);
+        fs.readFile('public/cache/' + req.query.id + '/' + track.track.fileName, function (err, data) {
+            res.setHeader('Content-Type','audio/mpeg');
+            res.send(data);
+        });
     });
 };

@@ -31,6 +31,7 @@ app.get('/', express.static(path.join(__dirname, 'public','index.html')));
 app.post('/client/auth', client.auth);
 app.get('/client/introduction', client.introduction);
 app.post('/p2p/hello', p2p.hello);
+app.get('/p2p/fetch', p2p.fetch);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

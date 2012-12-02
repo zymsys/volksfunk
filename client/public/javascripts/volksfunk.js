@@ -25,6 +25,17 @@ $(function () {
         }
     };
 
+    function getATrack(genre) {
+        $.ajax('/client/next',{
+            data: {
+                genre: genre
+            },
+            success: function(data) {
+                console.log(data);
+            }
+        });
+    }
+
     // When the secret is set in the viewModel, save it in a cookie
     ko.computed(function () {
         var secret = viewModel.secret(),
@@ -62,6 +73,7 @@ $(function () {
                 console.log('Send greetings to peers', data);
             }
         });
+        getATrack();
     });
 
     var genres = [

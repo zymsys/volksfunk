@@ -1,7 +1,10 @@
-var http = require('http');
+var http = require('http'),
+    events = require('events');
 
 var serverHost = 'localhost',
     serverPort = 3001;
+
+var queue = {};
 
 function withResponseData(response, doCallback) {
     var responseData = '';
@@ -50,9 +53,48 @@ exports.introduction = function (req, res) {
         path: '/services/introduction?secret=' + encodeURIComponent(req.query['secret']) +
             '&genre=' + encodeURIComponent(req.query['genre'])
     }, function (response) {
-        relayJSONResponse(response, res);
+        var i, j,introduction;
+        withResponseData(response, function (responseData) {
+            res.writeHead(200, { 'Content-type': 'application/json'});
+            res.end(responseData);
+            //Now request remote tracks
+            responseData = JSON.parse(responseData);
+            for (i = 0, j = responseData.length; i < j; i += 1) {
+                introduction = responseData[i];
+                var p2pRequest = http.request({
+                    hostname: introduction.host,
+                    port: introduction.port,
+                    path: '/p2p/hello',
+                    method: 'POST'
+                }, function (p2pResponse) {
+                    var rawResponse = '';
+                    p2pResponse.on('data', function (chunk) {
+                        rawResponse += chunk;
+                    });
+                    p2pResponse.on('end', function() {
+                        var responseData = JSON.parse(rawResponse);
+                        console.log(responseData);
+                    });
+                });
+                p2pRequest.end();
+            }
+        });
     });
     request.end();
+};
+
+function sendNextTrack(genre, res) {
+    if (queue[genre].length > 0) {
+        res.json(queue[genre].shift());
+    } else {
+        exports.waitingForNextTrack = res;
+    }
+}
+
+exports.next = function (req, res) {
+    var genre = req.query.genre;
+    if (!queue[genre]) queue[genre] = [];
+    sendNextTrack(genre, res);
 };
 
 /*

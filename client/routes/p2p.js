@@ -14,22 +14,16 @@ function withData(provider, doCallback) {
 
 exports.hello = function (req, res) {
     withData(req, function(data) {
+        var responseData = {};
         data = JSON.parse(data);
-        var responseData = {
-            music: {
-                'guid1': {
-                    plays: 20,
-                    likes: 2,
-                    dislikes: 0
-                },
-                'guid2': {
-                    plays: 13,
-                    likes: 0,
-                    dislikes: 1
-                }
+        fs.readdir('public/cache', function (tracks) {
+            var i, j,trackId;
+            for (i = 0, j = tracks.length; i < j; i += 1) {
+                trackId = tracks[i];
+                responseData[trackId] = fs.readFileSync('public/cache/' + trackId + '/track.json');
             }
-        }
-        res.json(responseData);
+            res.json(responseData);
+        });
     });
 };
 

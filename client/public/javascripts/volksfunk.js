@@ -92,7 +92,8 @@ $(function () {
 
     //Temp hack to set secret to test value
     $('.logo').click(function () {
-        $.cookie('volksfunk_secret', 'cc62f827-ade2-4d45-9edb-5130e7678020', { expires: 30, path: '/' });
+        $.removeCookie('volksfunk_secret');
+//        $.cookie('volksfunk_secret', 'cc62f827-ade2-4d45-9edb-5130e7678020', { expires: 30, path: '/' });
     });
 
     ko.applyBindings(viewModel);

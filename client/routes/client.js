@@ -21,6 +21,12 @@ function relayJSONResponse(response, toResponse) {
 }
 
 exports.auth = function(req, res) {
+    var env = process.env;
+    console.log(env);
+    if (env.SECRET) {
+        res.json({secret:env.SECRET});
+        return;
+    }
     var requestBody = 'email=' + encodeURIComponent(req.body.email) + '&password=' + encodeURIComponent(req.body.password);
     var request = http.request({
         hostname: serverHost,
@@ -48,3 +54,17 @@ exports.introduction = function (req, res) {
     });
     request.end();
 };
+
+/*
+    Browser client needs to long poll vf client for track.
+    vf client has already asked vf server for introductions, and has initiated p2p hello from intro.
+    p2p hello should request wanted songs
+     Available songs should queue for play
+     When songs are available, browser long poll should return with a song.  Next long poll gets next song.
+
+     On start, cached songs are read into a queue (array)
+     Once the first song, and again for the last song is queued fire a queue.ready event (using the event module)
+     Once any song is loaded via p2p, fire the queue.ready event.
+
+     The above long polling can listed for queue.ready before sending a response with a link to the queued mp3 file.
+*/

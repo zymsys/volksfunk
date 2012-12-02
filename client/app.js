@@ -5,6 +5,7 @@
 
 var express = require('express')
   , client = require('./routes/client')
+  , p2p = require('./routes/p2p')
   , http = require('http')
   , path = require('path');
 
@@ -29,6 +30,7 @@ app.configure('development', function(){
 app.get('/', express.static(path.join(__dirname, 'public','index.html')));
 app.post('/client/auth', client.auth);
 app.get('/client/introduction', client.introduction);
+app.post('/p2p/hello', p2p.hello);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

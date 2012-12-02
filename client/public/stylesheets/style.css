@@ -1,5 +1,4 @@
 body {
-    padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -13,13 +12,19 @@ a {
     margin-right: auto;
 }
 
-#logo {
+.logo {
     background-image: url('/images/Volksfunk.png');
     width: 700px;
     height: 406px;
 }
 
-#logo span {
+.logo.small {
+    background-image: url('/images/VolksfunkSm.png');
+    width: 175px;
+    height: 102px;
+}
+
+.logo span {
     display: none;
 }
 
@@ -27,17 +32,17 @@ a {
     margin-top: 15px;
 }
 
-#login {
+#loginPanel {
     display: inline-block;
     width: 350px;
     float: left;
 }
 
-#login span {
+#loginPanel span {
     text-align: right;
 }
 
-#login .caption {
+#loginPanel .caption {
     display: inline-block;
     width: 150px;
 }
@@ -48,4 +53,20 @@ a {
     font-size: 18px;
     padding: 5px;
     background-color: #bbb;
+}
+
+#genreList span:hover {
+    background-color: yellow;
+}
+#genreList span {
+    cursor: pointer;
+    display: inline-block;
+    width: 120px;
+    height: 23px;
+    background-color: #ddd;
+    border: 1px solid black;
+    margin: 5px;
+    float: left;
+    text-align: center;
+    padding-top: 7px;
 }

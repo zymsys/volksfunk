@@ -5,14 +5,14 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body>
-    <div class="container">
+    <div id="login" class="container" data-bind="visible:page()=='login'">
         <div class="hd">
-            <div id="logo">
+            <div class="logo">
                 <span>volksfunk</span>
             </div>
         </div>
         <div class="bd">
-            <div id="login">
+            <div id="loginPanel">
                 <div>
                     <span class="caption">Email:</span>
                     <input data-bind="value:login.email">
@@ -31,8 +31,37 @@
             </div>
         </div>
     </div>
+    <div id="genre" class="container" data-bind="visible:page()=='genre'">
+        <div class="hd">
+            <div class="logo small">
+                <span>volksfunk</span>
+            </div>
+        </div>
+        <div class="bd">
+            What are you in the mood for?
+        </div>
+        <div id="genreList" class="bd">
+        </div>
+    </div>
+    <div id="radio" class="container" data-bind="visible:page()=='radio'">
+        <div class="hd">
+            <div class="logo small">
+                <span>volksfunk</span>
+            </div>
+        </div>
+        <div class="bd">
+            Radio player goes here...
+        </div>
+    </div>
 </body>
 <script src="/javascripts/jquery-1.8.2.min.js"></script>
+
+<!--
+https://github.com/carhartl/jquery-cookie
+https://raw.github.com/carhartl/jquery-cookie/master/jquery.cookie.js
+-->
+<script src="/javascripts/jquery.cookie.js"></script>
+
 <script src="/javascripts/knockout-2.2.0.debug.js"></script>
 <script src="/javascripts/volksfunk.js"></script>
 </html>

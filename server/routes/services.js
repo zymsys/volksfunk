@@ -2,7 +2,7 @@ var MongoClient = require('mongodb').MongoClient
     , Server = require('mongodb').Server;
 var uuid = require('node-uuid');
 var mongoClient = new MongoClient(new Server('localhost', 27017));
-
+var queryString = require('querystring');
 var db;
 
 mongoClient.open(function(err, mongoClient) {
@@ -21,18 +21,20 @@ exports.auth = function(req, res) {
         rawRequest += chunk;
     });
     req.on('end', function () {
-        console.log(rawRequest);
+        var requestData = queryString.parse(rawRequest);
         var users = db.collection('users');
         var logins = db.collection('logins');
-        users.findOne({email:req.body.email}, function (err, user) {
+        users.findOne({email:requestData.email}, function (err, user) {
             var secret;
-            if (user && (user.password == req.body.password)) {
+            if (user && (user.password == requestData.password)) {
                 secret = uuid.v4();
                 logins.insert({
                     secret: secret,
-                    user: req.body.email,
+                    user: requestData.email,
                     host: req.connection.remoteAddress,
-                    port: req.body.port
+                    port: requestData.port
+                }, function () {
+                    //Deal with write errors here
                 });
                 res.json({secret: secret});
                 return;

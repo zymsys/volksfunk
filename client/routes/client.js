@@ -8,7 +8,7 @@ exports.auth = function(req, res) {
         path: '/services/auth',
         method: 'POST',
         headers: {
-            'Content-length': requestBody.length
+            'Content-Length': requestBody.length
         }
     }, function (response) {
         var responseData = '';
@@ -20,7 +20,6 @@ exports.auth = function(req, res) {
             res.end(responseData);
         });
     });
-    console.log(requestBody);
     request.write(requestBody);
     request.end();
 };

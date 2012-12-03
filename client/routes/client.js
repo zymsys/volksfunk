@@ -1,4 +1,5 @@
 var http = require('http'),
+    fs = require('fs'),
     events = require('events');
 
 var serverHost = 'localhost',
@@ -46,6 +47,42 @@ exports.auth = function(req, res) {
     request.end();
 };
 
+function fetchFileFromPeer(introduction, trackId, responseData, gotIt) {
+    var fileRequest = http.request({
+        hostname:introduction.host,
+        port:introduction.port,
+        path:'/p2p/fetch?id=' + trackId
+    }, function (fileResponse) {
+        console.log(process.cwd());
+        process.chdir('public/cache');
+
+        var exists = true;
+        try {
+            fs.statSync(trackId);
+        } catch (e) {
+            exists = false;
+        }
+        if (exists) {
+            process.chdir('../..');
+            gotIt(trackId);
+            return;
+        }
+        fs.mkdirSync(trackId, 0700);
+        process.chdir('../..');
+        fs.writeFileSync('public/cache/' + trackId + '/track.json', responseData[trackId], 'utf8');
+        var trackData = JSON.parse(responseData[trackId]);
+        var file = fs.createWriteStream('public/cache/' + trackId + '/' + trackData.track.fileName);
+        fileResponse.on('data', function (chunk) {
+            file.write(chunk);
+        });
+        fileResponse.on('end', function () {
+            file.end();
+            gotIt(trackId);
+        });
+    });
+    fileRequest.end();
+    return fileRequest;
+}
 exports.introduction = function (req, res) {
     var request = http.request({
         hostname: serverHost,
@@ -73,6 +110,15 @@ exports.introduction = function (req, res) {
                     });
                     p2pResponse.on('end', function() {
                         var responseData = JSON.parse(rawResponse);
+                        var trackId;
+                        for (trackId in responseData) {
+                            var fileRequest = fetchFileFromPeer(introduction, trackId, responseData, function (trackId) {
+                                if (exports.waitingForNextTrack) {
+                                    exports.waitingForNextTrack.json({track:trackId});
+                                    delete exports.waitingForNextTrack;
+                                }
+                            });
+                        }
                         console.log(responseData);
                     });
                 });

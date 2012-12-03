@@ -31,7 +31,7 @@ $(function () {
                 genre: genre
             },
             success: function(data) {
-                console.log(data);
+                $('#player').empty().append($('<audio controls="controls" autoplay="autoplay"><source src="/p2p/fetch?id=' + data.track + '"></audio>'));
             }
         });
     }
